@@ -349,12 +349,19 @@ QWENTON-COPS/
     8. DPDP Act compliance verified for account erasure and RFC 4180 CSV export.
   - Security audit report fully updated in [`.agent/security_report.md`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.agent/security_report.md).
 
-- **Git & CI/CD APK Compilation Pipeline Configured & Hardened:**
+- **Git & CI/CD APK Compilation Pipeline Configured, Hardened & Verified (100% Green):**
   - Initialized git repository on `main` branch with clean working tree.
   - Added comprehensive `.gitignore` files for root, `admin/`, `user/`, and `backend/`.
   - Added official Gradle wrappers (`gradlew`, `gradlew.bat`, `gradle-wrapper.jar`) in `admin/` and `user/`.
-  - Hardened GitHub Actions workflow [`.github/workflows/build-apks.yml`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.github/workflows/build-apks.yml): Removed deprecated `android-actions/setup-android@v3` (which failed due to Google's removal of legacy `tools`), replaced with native GitHub runner Android SDK 34 environment and automated license acceptance.
-  - Added `androidx.compose.material:material-icons-extended` to `admin` and `user` dependencies to ensure all Material icons (`ShoppingCart`, `Lock`, `Send`, `CheckCircle`) resolve during APK compilation.
+  - Hardened GitHub Actions workflow [`.github/workflows/build-apks.yml`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.github/workflows/build-apks.yml) using GitHub runner's native Android SDK 34 environment and automatic license acceptance.
+  - Fixed Kotlin DSL Version Catalog accessor hyphen syntax (`libs.kotlinx.coroutines.play.services`).
+  - Fixed coroutines import (`kotlinx.coroutines.suspendCancellableCoroutine`) in `AuthRepository.kt` and `CustomerAuthRepository.kt`.
+  - Added missing `import androidx.compose.foundation.clickable` in `CheckoutScreen.kt`.
+  - Added `androidx.compose.material:material-icons-extended` to `admin` and `user` dependencies.
+  - **Verification:** GitHub Actions Workflow Run [`39439248513`](https://github.com/naitik99045/QWENTON-COPS/actions/runs/39439248513) passed with **100% SUCCESS**.
+  - Generated and uploaded downloadable APK artifacts:
+    - **`Qwenton-Admin-Seller-APK`** (20.5 MB)
+    - **`Qwenton-Customer-Storefront-APK`** (21.0 MB)
   - Added root [`README.md`](file:///C:/Users/hp/Desktop/QWENTON-COPS/README.md) with complete developer documentation and deployment instructions.
 
 ---
