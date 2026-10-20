@@ -17,32 +17,45 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-webhook-signature") ||
       req.headers.get("x-signature");
 
-    const webhookSecret = process.env.FAMGATEWAY_WEBHOOK_SECRET;
+    const apiKeyHeader =
+      req.headers.get("x-api-key") ||
+      req.headers.get("api-key") ||
+      req.headers.get("authorization");
 
-    // Cryptographic Signature Verification (HMAC-SHA256)
-    if (webhookSecret && webhookSecret !== "fg_whsec_sample_987654321") {
-      if (!signature) {
-        console.warn("[FamGateway Webhook] Missing signature header");
+    const webhookSecret = process.env.FAMGATEWAY_WEBHOOK_SECRET;
+    const apiKey = process.env.FAMGATEWAY_API_KEY;
+
+    // If FamGateway validates via direct API key header:
+    const isApiKeyHeaderValid =
+      apiKey &&
+      apiKeyHeader &&
+      (apiKeyHeader === apiKey || apiKeyHeader === `Bearer ${apiKey}`);
+
+    // Cryptographic Signature Verification (HMAC-SHA256) if signature or secret exists
+    const secretToVerify = webhookSecret || (signature ? apiKey : null);
+    if (secretToVerify && secretToVerify !== "fg_whsec_sample_987654321" && !isApiKeyHeaderValid) {
+      if (signature) {
+        const expectedSignature = crypto
+          .createHmac("sha256", secretToVerify)
+          .update(rawBody)
+          .digest("hex");
+
+        const isValid = crypto.timingSafeEqual(
+          Buffer.from(signature, "utf-8"),
+          Buffer.from(expectedSignature, "utf-8")
+        );
+
+        if (!isValid) {
+          console.error("[FamGateway Webhook] Invalid signature verification failure");
+          return NextResponse.json(
+            { error: "Invalid signature" },
+            { status: 401 }
+          );
+        }
+      } else if (webhookSecret) {
+        console.warn("[FamGateway Webhook] Missing signature header while secret is enforced");
         return NextResponse.json(
           { error: "Missing signature header" },
-          { status: 401 }
-        );
-      }
-
-      const expectedSignature = crypto
-        .createHmac("sha256", webhookSecret)
-        .update(rawBody)
-        .digest("hex");
-
-      const isValid = crypto.timingSafeEqual(
-        Buffer.from(signature, "utf-8"),
-        Buffer.from(expectedSignature, "utf-8")
-      );
-
-      if (!isValid) {
-        console.error("[FamGateway Webhook] Invalid signature verification failure");
-        return NextResponse.json(
-          { error: "Invalid signature" },
           { status: 401 }
         );
       }
