@@ -1,0 +1,75 @@
+name: Build Android APKs (Admin & User)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-admin-apk:
+    name: Build Admin Seller APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x admin/gradlew
+
+      - name: Build Admin Debug APK
+        run: |
+          cd admin
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Upload Admin APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Qwenton-Admin-Seller-APK
+          path: admin/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  build-user-apk:
+    name: Build Customer Storefront APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x user/gradlew
+
+      - name: Build User Storefront Debug APK
+        run: |
+          cd user
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Upload User APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Qwenton-Customer-Storefront-APK
+          path: user/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
