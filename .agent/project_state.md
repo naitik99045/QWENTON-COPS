@@ -349,11 +349,12 @@ QWENTON-COPS/
     8. DPDP Act compliance verified for account erasure and RFC 4180 CSV export.
   - Security audit report fully updated in [`.agent/security_report.md`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.agent/security_report.md).
 
-- **Git & CI/CD APK Compilation Pipeline Configured:**
+- **Git & CI/CD APK Compilation Pipeline Configured & Hardened:**
   - Initialized git repository on `main` branch with clean working tree.
   - Added comprehensive `.gitignore` files for root, `admin/`, `user/`, and `backend/`.
   - Added official Gradle wrappers (`gradlew`, `gradlew.bat`, `gradle-wrapper.jar`) in `admin/` and `user/`.
-  - Added GitHub Actions workflow [`.github/workflows/build-apks.yml`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.github/workflows/build-apks.yml) to automatically compile `Qwenton-Admin-Seller-APK` and `Qwenton-Customer-Storefront-APK` upon push.
+  - Hardened GitHub Actions workflow [`.github/workflows/build-apks.yml`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.github/workflows/build-apks.yml): Removed deprecated `android-actions/setup-android@v3` (which failed due to Google's removal of legacy `tools`), replaced with native GitHub runner Android SDK 34 environment and automated license acceptance.
+  - Added `androidx.compose.material:material-icons-extended` to `admin` and `user` dependencies to ensure all Material icons (`ShoppingCart`, `Lock`, `Send`, `CheckCircle`) resolve during APK compilation.
   - Added root [`README.md`](file:///C:/Users/hp/Desktop/QWENTON-COPS/README.md) with complete developer documentation and deployment instructions.
 
 ---
