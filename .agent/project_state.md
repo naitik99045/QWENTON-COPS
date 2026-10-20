@@ -1,5 +1,5 @@
 # Project State & Context
-**Last Updated:** 2026-10-20T14:30:00+05:30
+**Last Updated:** 2026-10-20T15:45:00+05:30
 
 ---
 
@@ -348,6 +348,13 @@ QWENTON-COPS/
     7. Zero Cost Leakage verified across Android Storefront models.
     8. DPDP Act compliance verified for account erasure and RFC 4180 CSV export.
   - Security audit report fully updated in [`.agent/security_report.md`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.agent/security_report.md).
+
+- **Git & CI/CD APK Compilation Pipeline Configured:**
+  - Initialized git repository on `main` branch with clean working tree.
+  - Added comprehensive `.gitignore` files for root, `admin/`, `user/`, and `backend/`.
+  - Added official Gradle wrappers (`gradlew`, `gradlew.bat`, `gradle-wrapper.jar`) in `admin/` and `user/`.
+  - Added GitHub Actions workflow [`.github/workflows/build-apks.yml`](file:///C:/Users/hp/Desktop/QWENTON-COPS/.github/workflows/build-apks.yml) to automatically compile `Qwenton-Admin-Seller-APK` and `Qwenton-Customer-Storefront-APK` upon push.
+  - Added root [`README.md`](file:///C:/Users/hp/Desktop/QWENTON-COPS/README.md) with complete developer documentation and deployment instructions.
 
 ---
 
